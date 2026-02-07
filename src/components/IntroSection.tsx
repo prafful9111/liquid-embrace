@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import HoldToBeginButton from './HoldToBeginButton';
 
 interface IntroSectionProps {
   name?: string;
+  onBegin: () => void;
 }
 
-const IntroSection = ({ name = "My Love" }: IntroSectionProps) => {
+const IntroSection = ({ name = "My Love", onBegin }: IntroSectionProps) => {
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6">
       {/* Dreamy background gradient */}
@@ -62,22 +63,10 @@ const IntroSection = ({ name = "My Love" }: IntroSectionProps) => {
         </motion.p>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-12 flex flex-col items-center gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
-      >
-        <span className="font-body text-xs uppercase tracking-widest text-muted-foreground">
-          Scroll to begin
-        </span>
-        <motion.div
-          className="bounce-gentle"
-        >
-          <ChevronDown className="h-5 w-5 text-primary" />
-        </motion.div>
-      </motion.div>
+      {/* Hold to begin button */}
+      <div className="absolute bottom-16">
+        <HoldToBeginButton onComplete={onBegin} holdDuration={2500} />
+      </div>
     </section>
   );
 };
