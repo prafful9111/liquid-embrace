@@ -1,13 +1,30 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import SmoothScroll from '@/components/SmoothScroll';
+import IntroSection from '@/components/IntroSection';
+import FloatingGallery from '@/components/FloatingGallery';
+import MagneticNote from '@/components/MagneticNote';
+import FloatingHearts from '@/components/FloatingHearts';
+import Footer from '@/components/Footer';
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <SmoothScroll>
+      <main className="relative min-h-screen overflow-x-hidden bg-gradient-sunset">
+        {/* Floating hearts effect */}
+        <FloatingHearts />
+
+        {/* Section 1: The Breath - Intro */}
+        <IntroSection name="My Love" />
+
+        {/* Section 2: Floating Gallery with Parallax */}
+        <FloatingGallery />
+
+        {/* Section 3: Magnetic Love Note */}
+        <MagneticNote />
+
+        {/* Footer */}
+        <Footer />
+      </main>
+    </SmoothScroll>
   );
 };
 
