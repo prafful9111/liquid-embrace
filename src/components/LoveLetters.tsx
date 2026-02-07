@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Lock, Key } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import * as confettiLib from 'canvas-confetti';
+const confetti = (confettiLib as any).default || confettiLib;
+
 import LoveMessageBg from '../assets/love-message-bg.mp4';
 
 const SECRET_ANSWER = "babu"; // Normalized to lowercase
