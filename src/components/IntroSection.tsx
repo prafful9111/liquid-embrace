@@ -6,12 +6,12 @@ interface IntroSectionProps {
   onBegin: () => void;
 }
 
-const IntroSection = ({ name = "My Love", onBegin }: IntroSectionProps) => {
+const IntroSection = ({ name = "Siddhi Piddi", onBegin }: IntroSectionProps) => {
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6">
       {/* Dreamy background gradient */}
       <div className="absolute inset-0 bg-gradient-sunset" />
-      
+
       {/* Soft glow effect */}
       <motion.div
         className="absolute top-1/4 h-64 w-64 rounded-full bg-peach opacity-20 blur-3xl"
@@ -39,9 +39,9 @@ const IntroSection = ({ name = "My Love", onBegin }: IntroSectionProps) => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
         >
-          A letter for you
+          UwU
         </motion.p>
-        
+
         <motion.h1
           className="font-display text-5xl font-medium italic leading-tight text-foreground sm:text-6xl"
           initial={{ opacity: 0, y: 20 }}
@@ -59,7 +59,7 @@ const IntroSection = ({ name = "My Love", onBegin }: IntroSectionProps) => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9, duration: 0.8 }}
         >
-          Every moment with you is a memory I want to hold forever
+
         </motion.p>
       </motion.div>
 

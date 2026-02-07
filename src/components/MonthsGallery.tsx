@@ -2,12 +2,18 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart } from 'lucide-react';
 
-import memory1 from '@/assets/memory-1.jpg';
-import memory2 from '@/assets/memory-2.jpg';
-import memory3 from '@/assets/memory-3.jpg';
-import memory4 from '@/assets/memory-4.jpg';
-import memory5 from '@/assets/memory-5.jpg';
-import memory6 from '@/assets/memory-6.jpg';
+import memory1 from '@/assets/month-1.jpg';
+import memory2 from '@/assets/month-2.jpg';
+import memory3 from '@/assets/month-3.jpg';
+import memory4 from '@/assets/month-4.jpg';
+import memory5 from '@/assets/month-5.jpg';
+import memory6 from '@/assets/month-6.jpg';
+import memory7 from '@/assets/month-7.jpg';
+import memory8 from '@/assets/month-8.jpg';
+import memory9 from '@/assets/month-9.jpg';
+import memory10 from '@/assets/month-10.jpg';
+import memory11 from '@/assets/month-11.jpg';
+import memory12 from '@/assets/month-12.jpg';
 
 interface MonthCardProps {
   month: string;
@@ -19,12 +25,12 @@ interface MonthCardProps {
 
 const monthImages = [
   memory1, memory2, memory3, memory4, memory5, memory6,
-  memory1, memory2, memory3, memory4, memory5, memory6,
+  memory7, memory8, memory9, memory10, memory11, memory12,
 ];
 
 const months = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'Gulu Gulu', 'Mirror Selfie', '💛 💛 💛', '💋 💋 💋', '👀', '💕 💕 💕',
+  '😩 😩 😩', 'Auto Ride', '❤️ ❤️ ❤️', 'Mere Shoes', '🫶🏻 🫶🏻 🫶🏻', '🛁 🛁 🛁',
 ];
 
 const MonthCard = ({ month, image, index, isFlipped, onFlip }: MonthCardProps) => {
@@ -158,10 +164,10 @@ const MonthsGallery = ({ isVisible }: MonthsGalleryProps) => {
             transition={{ delay: 0.3, duration: 0.8 }}
           >
             <h2 className="font-display text-3xl font-medium text-foreground">
-              Our Memories
+              Some more of my favourites 💛
             </h2>
             <p className="mt-2 font-body text-sm text-muted-foreground">
-              A year of love, one month at a time
+
             </p>
           </motion.div>
 

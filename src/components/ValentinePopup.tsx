@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Sparkles } from 'lucide-react';
+import loveYouHeart from '@/assets/love-you-heart.gif';
 
 interface ValentinePopupProps {
   isOpen: boolean;
@@ -8,7 +9,7 @@ interface ValentinePopupProps {
 }
 
 const ValentinePopup = ({ isOpen, onYes }: ValentinePopupProps) => {
-  const [noButtonPosition, setNoButtonPosition] = useState({ x: 0, y: 0 });
+  const [noButtonPosition, setNoButtonPosition] = useState<{ x: number; y: number } | null>(null);
   const [noAttempts, setNoAttempts] = useState(0);
   const [showMessage, setShowMessage] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,18 +27,24 @@ const ValentinePopup = ({ isOpen, onYes }: ValentinePopupProps) => {
 
   const moveNoButton = () => {
     if (!containerRef.current) return;
-    
+
     const container = containerRef.current.getBoundingClientRect();
-    const maxX = container.width / 2 - 60;
-    const maxY = container.height / 2 - 30;
-    
-    const newX = (Math.random() - 0.5) * 2 * maxX;
-    const newY = (Math.random() - 0.5) * 2 * maxY;
-    
+
+    // Button dimensions (approximate)
+    const buttonWidth = 100;
+    const buttonHeight = 50;
+
+    // Keep movement in a small safe zone - fixed max movement
+    const maxMovement = 80; // Maximum pixels to move in any direction
+
+    // Generate random position within very safe boundaries
+    const newX = (Math.random() - 0.5) * 2 * maxMovement;
+    const newY = (Math.random() - 0.5) * 2 * maxMovement;
+
     setNoButtonPosition({ x: newX, y: newY });
     setNoAttempts(prev => prev + 1);
     setShowMessage(teaseMessages[noAttempts % teaseMessages.length]);
-    
+
     // Clear message after delay
     setTimeout(() => setShowMessage(''), 1500);
   };
@@ -45,7 +52,7 @@ const ValentinePopup = ({ isOpen, onYes }: ValentinePopupProps) => {
   // Reset position when popup opens
   useEffect(() => {
     if (isOpen) {
-      setNoButtonPosition({ x: 0, y: 0 });
+      setNoButtonPosition(null); // Start in normal position
       setNoAttempts(0);
       setShowMessage('');
     }
@@ -98,7 +105,7 @@ const ValentinePopup = ({ isOpen, onYes }: ValentinePopupProps) => {
               </motion.div>
             ))}
           </div>
-
+          x
           {/* Popup card */}
           <motion.div
             ref={containerRef}
@@ -125,7 +132,11 @@ const ValentinePopup = ({ isOpen, onYes }: ValentinePopupProps) => {
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
               >
-                <Heart className="h-10 w-10 fill-primary-foreground text-primary-foreground" />
+                <img
+                  src={loveYouHeart}
+                  alt="Love You Heart"
+                  className="h-full w-full rounded-full object-cover"
+                />
               </motion.div>
 
               {/* Question */}
@@ -159,7 +170,7 @@ const ValentinePopup = ({ isOpen, onYes }: ValentinePopupProps) => {
               </AnimatePresence>
 
               {/* Buttons */}
-              <div className="relative mt-8 flex items-center justify-center gap-4 h-16">
+              <div className="relative mt-8 flex items-center justify-center gap-4 h-16" style={{ overflow: 'visible' }}>
                 {/* Yes button */}
                 <motion.button
                   className="relative flex items-center gap-2 rounded-full bg-primary px-8 py-3 font-body font-medium text-primary-foreground shadow-glow transition-all hover:shadow-deep"
@@ -178,14 +189,16 @@ const ValentinePopup = ({ isOpen, onYes }: ValentinePopupProps) => {
 
                 {/* No button - runs away */}
                 <motion.button
-                  className="rounded-full border-2 border-muted bg-background px-6 py-3 font-body text-muted-foreground transition-colors hover:bg-muted"
-                  animate={{
+                  className={noButtonPosition ? "absolute rounded-full border-2 border-muted bg-background px-6 py-3 font-body text-muted-foreground transition-colors hover:bg-muted shadow-lg z-10" : "rounded-full border-2 border-muted bg-background px-6 py-3 font-body text-muted-foreground transition-colors hover:bg-muted"}
+                  style={noButtonPosition ? {
+                    left: 0,
+                    top: 0,
+                  } : undefined}
+                  animate={noButtonPosition ? {
                     x: noButtonPosition.x,
                     y: noButtonPosition.y,
-                  }}
+                  } : undefined}
                   transition={{ type: 'spring', damping: 15, stiffness: 200 }}
-                  onMouseEnter={moveNoButton}
-                  onTouchStart={moveNoButton}
                   onClick={moveNoButton}
                 >
                   No

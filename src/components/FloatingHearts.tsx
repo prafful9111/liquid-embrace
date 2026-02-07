@@ -13,9 +13,9 @@ interface HeartParticle {
 const FloatingHearts = () => {
   const [hearts, setHearts] = useState<HeartParticle[]>([]);
   const [isTriggered, setIsTriggered] = useState(false);
-  
+
   const { scrollYProgress } = useScroll();
-  
+
   // Trigger hearts when reaching bottom of page
   const opacity = useTransform(scrollYProgress, [0.7, 0.85], [0, 1]);
 

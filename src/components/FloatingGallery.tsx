@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useVelocity, useSpring } from 'framer-motion';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 import memory1 from '@/assets/memory-1.jpg';
 import memory2 from '@/assets/memory-2.jpg';
@@ -13,9 +14,10 @@ interface MemoryCardProps {
   caption: string;
   velocity: any;
   parallaxOffset: number;
+  onClick?: () => void;
 }
 
-const MemoryCard = ({ src, caption, velocity, parallaxOffset }: MemoryCardProps) => {
+const MemoryCard = ({ src, caption, velocity, parallaxOffset, onClick }: MemoryCardProps) => {
   const skewY = useSpring(
     useTransform(velocity, [-1000, 0, 1000], [3, 0, -3]),
     { stiffness: 100, damping: 30 }
@@ -28,12 +30,15 @@ const MemoryCard = ({ src, caption, velocity, parallaxOffset }: MemoryCardProps)
 
   return (
     <motion.div
-      className="memory-card relative w-full"
+      className="memory-card relative w-full cursor-pointer"
       style={{
         skewY,
         scaleY,
         y: parallaxOffset,
       }}
+      onClick={onClick}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-3xl bg-card">
         <img
@@ -52,9 +57,51 @@ const MemoryCard = ({ src, caption, velocity, parallaxOffset }: MemoryCardProps)
   );
 };
 
+import { Heart } from 'lucide-react';
+
+const BackgroundHearts = () => {
+  const hearts = Array.from({ length: 20 });
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {hearts.map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute"
+          initial={{
+            opacity: 0,
+            y: "120vh",
+            x: Math.random() * 100 + "vw",
+            scale: 0.5 + Math.random() * 1,
+            rotate: Math.random() * 360,
+          }}
+          animate={{
+            opacity: [0, 1, 0],
+            y: "-20vh",
+            rotate: Math.random() * 360 + 360,
+          }}
+          transition={{
+            duration: 15 + Math.random() * 20,
+            repeat: Infinity,
+            delay: Math.random() * 20,
+            ease: "linear",
+          }}
+        >
+          <Heart
+            className="fill-yellow-400 text-yellow-400/50"
+            size={24 + Math.random() * 24}
+            strokeWidth={1}
+          />
+        </motion.div>
+      ))}
+    </div>
+  );
+};
+
 const FloatingGallery = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -68,19 +115,21 @@ const FloatingGallery = () => {
   const rightColumnY = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   const leftImages = [
-    { src: memory1, caption: "The day we met" },
-    { src: memory3, caption: "Sunsets together" },
-    { src: memory5, caption: "Quiet mornings" },
+    { src: memory1, caption: "Jor se Jhappi 🤗" },
+    { src: memory3, caption: "Hamari Favourite Photo💖" },
+    { src: memory5, caption: "Ham dono" },
   ];
 
   const rightImages = [
-    { src: memory2, caption: "Your favorite flowers" },
-    { src: memory4, caption: "Coffee conversations" },
-    { src: memory6, caption: "Summer dreams" },
+    { src: memory2, caption: "Aapki Lipstick 💋" },
+    { src: memory4, caption: "💛" },
+    { src: memory6, caption: "Pretty Little Baby💕" },
   ];
 
   return (
-    <section ref={containerRef} className="relative min-h-screen px-4 py-24">
+    <section ref={containerRef} className="relative min-h-screen px-4 py-24 overflow-hidden">
+      <BackgroundHearts />
+
       {/* Section title */}
       <motion.div
         className="mb-16 text-center"
@@ -89,16 +138,14 @@ const FloatingGallery = () => {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
       >
-        <h2 className="font-display text-3xl font-medium text-foreground">
-          Our Memories
+        <h2 className="font-display pb-9 text-3xl font-medium text-foreground">
+          The day we met
         </h2>
-        <p className="mt-2 font-body text-sm text-muted-foreground">
-          Floating in time, forever ours
-        </p>
+
       </motion.div>
 
       {/* Staggered grid */}
-      <div className="mx-auto grid max-w-sm grid-cols-2 gap-4">
+      <div className="mx-auto grid max-w-sm grid-cols-2 gap-4 relative z-10">
         {/* Left column - slower parallax */}
         <motion.div
           className="flex flex-col gap-6 pt-12"
@@ -117,6 +164,7 @@ const FloatingGallery = () => {
                 caption={img.caption}
                 velocity={smoothVelocity}
                 parallaxOffset={0}
+                onClick={() => setSelectedImage(img.src)}
               />
             </motion.div>
           ))}
@@ -132,7 +180,7 @@ const FloatingGallery = () => {
               key={img.caption}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "-20px" }}
               transition={{ duration: 0.8, delay: index * 0.15 + 0.1 }}
             >
               <MemoryCard
@@ -140,11 +188,24 @@ const FloatingGallery = () => {
                 caption={img.caption}
                 velocity={smoothVelocity}
                 parallaxOffset={0}
+                onClick={() => setSelectedImage(img.src)}
               />
             </motion.div>
           ))}
         </motion.div>
       </div>
+
+      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
+        <DialogContent className="max-w-3xl border-none bg-transparent p-0 shadow-none">
+          <div className="relative h-[80vh] w-full overflow-hidden rounded-lg">
+            <img
+              src={selectedImage || ''}
+              alt="Memory Full View"
+              className="h-full w-full object-contain"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
