@@ -59,7 +59,7 @@ const LoveLetters = () => {
     };
 
     return (
-        <section className="min-h-screen h-[100dvh] relative overflow-hidden bg-black flex items-center justify-center">
+        <section className="min-h-screen h-[100dvh] relative overflow-hidden bg-background flex items-center justify-center">
             {/* Background Video */}
             <AnimatePresence>
                 {!isLocked && (
