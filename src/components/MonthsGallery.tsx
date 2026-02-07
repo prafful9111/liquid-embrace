@@ -141,10 +141,14 @@ interface MonthsGalleryProps {
 }
 
 const MonthsGallery = ({ isVisible }: MonthsGalleryProps) => {
-  const [flippedCard, setFlippedCard] = useState<number | null>(null);
+  const [flippedCards, setFlippedCards] = useState<number[]>([]);
 
   const handleFlip = (index: number) => {
-    setFlippedCard(prev => prev === index ? null : index);
+    setFlippedCards(prev =>
+      prev.includes(index)
+        ? prev.filter(i => i !== index)
+        : [...prev, index]
+    );
   };
 
   return (
@@ -179,7 +183,7 @@ const MonthsGallery = ({ isVisible }: MonthsGalleryProps) => {
                 month={month}
                 image={monthImages[index]}
                 index={index}
-                isFlipped={flippedCard === index}
+                isFlipped={flippedCards.includes(index)}
                 onFlip={() => handleFlip(index)}
               />
             ))}
